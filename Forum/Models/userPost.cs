@@ -11,7 +11,11 @@ namespace Forum.Models
         public int ID { get; set; }
         public DateTime TimeStamp { get; set; }
 
+        [MinLength(1)]
+        [MaxLength(25)]
         public string Subject { get; set; }
+        [MinLength(1)]
+        [MaxLength(100)]
         public string Message { get; set; }
 
     }

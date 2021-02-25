@@ -34,10 +34,36 @@ namespace Forum.Controllers
             return posts.FirstOrDefault(posts => posts.ID == id);
         }
 
+        // GET api/<ForumController>/5
+        [HttpGet("Count/{count}")]
+        public IEnumerable<userPost> GetCount(int count)
+        {
+            var recents = posts.OrderByDescending(p =>p.ID).Take(count);
+            return recents;
+        }
+
         // POST api/<ForumController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public string Post([FromBody] userPost value)
         {
+            if (ModelState.IsValid)
+            {
+                int id;
+                if (posts.Count == 0)
+                {
+                    id = 0;
+                }
+                {
+                    id = posts[posts.Count - 1].ID + 1;
+                }
+                userPost up = new userPost() { ID = id, TimeStamp = DateTime.Now, Subject = value.Subject, Message = value.Message };
+                posts.Add(up);
+                return "Post added!";
+            }
+            else
+            {
+                return "Failed to add post!";
+            }
         }
 
         // PUT api/<ForumController>/5
