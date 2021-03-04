@@ -18,5 +18,14 @@ namespace Forum.Models
         [MaxLength(100)]
         public string Message { get; set; }
 
+        public userPost(int _id, string _subj, string _msg)
+        {
+            ID = _id;
+            Subject = _subj;
+            Message = _subj;
+        }
+
+        public userPost()
+        { }
     }
 }

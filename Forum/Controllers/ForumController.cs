@@ -13,32 +13,41 @@ namespace Forum.Controllers
     [ApiController]
     public class ForumController : ControllerBase
     {
-        static private List<userPost> posts = new List<userPost>()
+        PostContext ptx;
+
+        public ForumController()
+        {
+            ptx = new PostContext();
+            ptx.Database.EnsureCreated();
+        }
+
+/*        static private List<userPost> posts = new List<userPost>()
         {
             new userPost(){ID=1, TimeStamp=DateTime.Now, Subject="First!", Message="First Post"},
             new userPost(){ID=2, TimeStamp=DateTime.Now, Subject="Second!", Message="Second Post"},
             new userPost(){ID=3, TimeStamp=DateTime.Now, Subject="Third!", Message="Third Post"}
-        };
+        };*/
         
         // GET: api/<ForumController>
         [HttpGet]
         public List<userPost> Get()
         {
-            return posts;
+            //return posts;
+            return ptx.Posts.ToList();
         }
 
         // GET api/<ForumController>/5
         [HttpGet("{id}")]
         public userPost Get(int id)
         {
-            return posts.FirstOrDefault(posts => posts.ID == id);
+            return ptx.Posts.FirstOrDefault(posts => posts.ID == id);
         }
 
         // GET api/<ForumController>/5
         [HttpGet("Count/{count}")]
         public IEnumerable<userPost> GetCount(int count)
         {
-            var recents = posts.OrderByDescending(p =>p.ID).Take(count);
+            var recents = ptx.Posts.OrderByDescending(p =>p.ID).Take(count);
             return recents;
         }
 
@@ -48,7 +57,7 @@ namespace Forum.Controllers
         {
             if (ModelState.IsValid)
             {
-                int id;
+/*                int id;
                 if (posts.Count == 0)
                 {
                     id = 0;
@@ -56,8 +65,10 @@ namespace Forum.Controllers
                 {
                     id = posts[posts.Count - 1].ID + 1;
                 }
-                userPost up = new userPost() { ID = id, TimeStamp = DateTime.Now, Subject = value.Subject, Message = value.Message };
-                posts.Add(up);
+*/
+                userPost usp = new userPost() {TimeStamp = DateTime.Now, Subject = value.Subject, Message = value.Message };
+                ptx.Posts.Add(usp);
+                ptx.SaveChanges();
                 return "Post added!";
             }
             else
